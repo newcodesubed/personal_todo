@@ -1,8 +1,14 @@
 import { pool } from "./db";
 
 const start = async () => {
-  const res = await pool.query("SELECT NOW()");
-  console.log("Current time from DB:", res.rows);
+  await pool.query(
+    'INSERT INTO days (date, status) VALUES ($1, $2)',
+    ['2026-03-25', 'red']
+  );
+  const res = await pool.query(
+    'SELECT * FROM days'
+  );
+  console.log(res.rows);
 };
 
 start();
