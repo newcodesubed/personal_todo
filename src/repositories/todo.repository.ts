@@ -19,22 +19,18 @@ export const getTodoStatsByDate = async (date: string) => {
     const result = await pool.query<TodoStats>(
         `
     SELECT 
+      t.*,
       d.date,
-      COUNT(t.id) AS total,
-      COUNT(CASE WHEN t.completed = true THEN 1 END) AS completed,
-      CASE 
-        WHEN COUNT(t.id) = 0 THEN 0
-        ELSE COUNT(CASE WHEN t.completed = true THEN 1 END)::float / COUNT(t.id)
-      END AS completion_ratio
-    FROM days d
-    LEFT JOIN todos t ON d.id = t.day_id
+      COUNT(t.id) OVER () AS total,
+      COUNT(CASE WHEN t.completed = true THEN 1 END) OVER () AS completed
+    FROM todos t
+    JOIN days d ON t.day_id = d.id
     WHERE d.date = $1
-    GROUP BY d.date
     `,
         [date]
     );
 
-    return result.rows[0];
+    return result.rows;
 };
 export const createTodo = async (dayId: number, text: string) => {
     const result = await pool.query<Todo>(
