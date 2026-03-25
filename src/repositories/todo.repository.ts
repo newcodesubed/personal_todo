@@ -58,3 +58,17 @@ export const getTodosWithDay = async () => {
 
     return result.rows;
 };
+
+export const getTodosByDate = async (date: string) => {
+    const result = await pool.query(
+        `
+    SELECT t.*
+    FROM todos t
+    JOIN days d ON t.day_id = d.id
+    WHERE d.date = $1
+    `,
+        [date]
+    );
+
+    return result.rows;
+};
