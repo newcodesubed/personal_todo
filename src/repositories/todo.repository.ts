@@ -8,9 +8,37 @@ type Todo = {
 type TodoWithDay = Todo & {
     date: string;
 }
+type TodoStats = {
+    date: string;
+    total: number;
+    completed: number;
+    completion_ratio: number;
+};
+
+export const getTodoStatsByDate = async (date: string) => {
+    const result = await pool.query<TodoStats>(
+        `
+    SELECT 
+      d.date,
+      COUNT(t.id) AS total,
+      COUNT(CASE WHEN t.completed = true THEN 1 END) AS completed,
+      CASE 
+        WHEN COUNT(t.id) = 0 THEN 0
+        ELSE COUNT(CASE WHEN t.completed = true THEN 1 END)::float / COUNT(t.id)
+      END AS completion_ratio
+    FROM days d
+    LEFT JOIN todos t ON d.id = t.day_id
+    WHERE d.date = $1
+    GROUP BY d.date
+    `,
+        [date]
+    );
+
+    return result.rows[0];
+};
 export const createTodo = async (dayId: number, text: string) => {
     const result = await pool.query<Todo>(
-        'INSERT INTO todos (day_id, text) VALUES ($1, $2) RETURNING *',
+        `INSERT INTO todos (day_id, text) VALUES ($1, $2) RETURNING *`,
         [dayId, text]
     );
     if (result.rows.length === 0) {
