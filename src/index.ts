@@ -1,14 +1,12 @@
-import { pool } from "./db";
+
+import { createDay, getDays } from "./repositories/day.repository";
 
 const start = async () => {
-  await pool.query(
-    'INSERT INTO days (date, status) VALUES ($1, $2)',
-    ['2026-03-25', 'red']
-  );
-  const res = await pool.query(
-    'SELECT * FROM days'
-  );
-  console.log(res.rows);
+  const newDay = await createDay('2026-03-24', 'red');
+  console.log("Inserted", newDay);
+  const days = await getDays();
+  console.log("All days", days);
+
 };
 
 start();
