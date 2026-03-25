@@ -1,0 +1,20 @@
+CREATE TABLE days (
+  id SERIAL PRIMARY KEY,
+  date DATE UNIQUE NOT NULL,
+  completion_ratio FLOAT DEFAULT 0,
+  status TEXT CHECK (status IN ('red', 'green')) NOT NULL
+);
+
+CREATE TABLE todos (
+  id SERIAL PRIMARY KEY,
+  day_id INTEGER REFERENCES days(id) ON DELETE CASCADE,
+  text TEXT NOT NULL,
+  completed BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE images (
+  id SERIAL PRIMARY KEY,
+  day_id INTEGER REFERENCES days(id) ON DELETE CASCADE,
+  url TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
