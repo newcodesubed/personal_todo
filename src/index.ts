@@ -5,7 +5,7 @@ import { createTodo, getTodosByDay, updateTodo, deleteTodo } from "./repositorie
 const start = async () => {
   // const newTodo = await createTodo('1', 'go to gym');
   // console.log("Inserted", newTodo);
-  const todos = await getTodosByDay('1');
+  const todos = await getTodosByDay(1);
   console.log("All todos", todos);
   // const updatedTodo = await updateTodo('1', 'Buy milks', true);
   // console.log("Updated", updatedTodo);

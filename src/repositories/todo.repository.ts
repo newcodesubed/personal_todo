@@ -1,33 +1,48 @@
 import { pool } from "../db";
-
-export const createTodo = async (dayId: string, text: string) => {
-    const result = await pool.query(
+type Todo = {
+    id: number;
+    day_id: number;
+    text: string;
+    completed: boolean;
+};
+export const createTodo = async (dayId: number, text: string) => {
+    const result = await pool.query<Todo>(
         'INSERT INTO todos (day_id, text) VALUES ($1, $2) RETURNING *',
         [dayId, text]
     );
+    if (result.rows.length === 0) {
+        throw new Error("Todo not found");
+    }
     return result.rows[0];
 }
 
-export const getTodosByDay = async (dayId: string) => {
-    const result = await pool.query(
+export const getTodosByDay = async (dayId: number) => {
+    const result = await pool.query<Todo>(
         'SELECT * FROM todos WHERE day_id = $1',
         [dayId]
     );
     return result.rows;
 }
 
-export const updateTodo = async (id: string, text: string, isCompleted: boolean) => {
-    const result = await pool.query(
+export const updateTodo = async (id: number, text: string, isCompleted: boolean) => {
+    const result = await pool.query<Todo>(
         'UPDATE todos SET text = $1, completed = $2 WHERE id = $3 RETURNING *',
         [text, isCompleted, id]
     );
+    if (result.rows.length === 0) {
+        throw new Error("Todo not found");
+    }
     return result.rows[0];
 }
 
-export const deleteTodo = async (id: string) => {
-    const result = await pool.query(
+export const deleteTodo = async (id: number) => {
+    const result = await pool.query<Todo>(
         'DELETE FROM todos WHERE id = $1 RETURNING *',
         [id]
     );
+    if (result.rows.length === 0) {
+        throw new Error("Todo not found");
+    }
     return result.rows[0];
 }
+
