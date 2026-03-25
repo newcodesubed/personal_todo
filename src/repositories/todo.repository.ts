@@ -5,6 +5,9 @@ type Todo = {
     text: string;
     completed: boolean;
 };
+type TodoWithDay = Todo & {
+    date: string;
+}
 export const createTodo = async (dayId: number, text: string) => {
     const result = await pool.query<Todo>(
         'INSERT INTO todos (day_id, text) VALUES ($1, $2) RETURNING *',
@@ -46,3 +49,12 @@ export const deleteTodo = async (id: number) => {
     return result.rows[0];
 }
 
+export const getTodosWithDay = async () => {
+    const result = await pool.query<TodoWithDay>(`
+    SELECT t.*, d.date
+    FROM todos t
+    JOIN days d ON t.day_id = d.id
+  `);
+
+    return result.rows;
+};
