@@ -1,4 +1,3 @@
-import { Result } from "pg";
 import { pool } from "../db";
 
 export const createDay = async (date: string, status: string) => {
@@ -14,3 +13,12 @@ export const getDays = async () => {
     );
     return res.rows;
 }
+
+export const getDayByDate = async (date: string) => {
+    const result = await pool.query(
+        "SELECT * FROM days WHERE date = $1",
+        [date]
+    );
+
+    return result.rows[0];
+};
