@@ -22,3 +22,22 @@ export const getDayByDate = async (date: string) => {
 
     return result.rows[0];
 };
+
+export const updateDayStats = async (
+    dayId: number,
+    ratio: number,
+    status: "red" | "green"
+) => {
+    const result = await pool.query(
+        `
+    UPDATE days
+    SET completion_ratio = $1,
+        status = $2
+    WHERE id = $3
+    RETURNING *
+    `,
+        [ratio, status, dayId]
+    );
+
+    return result.rows[0];
+};
