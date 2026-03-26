@@ -37,9 +37,6 @@ export const createTodo = async (dayId: number, text: string) => {
         `INSERT INTO todos (day_id, text) VALUES ($1, $2) RETURNING *`,
         [dayId, text]
     );
-    if (result.rows.length === 0) {
-        throw new Error("Todo not found");
-    }
     return result.rows[0];
 }
 

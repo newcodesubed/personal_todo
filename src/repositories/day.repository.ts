@@ -1,9 +1,9 @@
 import { pool } from "../db";
 
-export const createDay = async (date: string, status: string) => {
+export const createDay = async (date: string) => {
     const result = await pool.query(
         'INSERT INTO days (date, status) VALUES ($1, $2) RETURNING *',
-        [date, status]
+        [date, "red"]
     );
     return result.rows[0];
 };
