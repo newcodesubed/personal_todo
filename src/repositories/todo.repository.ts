@@ -40,7 +40,7 @@ export const createTodo = async (dayId: number, text: string) => {
     return result.rows[0];
 }
 
-export const getTodosByDay = async (dayId: number) => {
+export const getTodosByDayId = async (dayId: number) => {
     const result = await pool.query<Todo>(
         'SELECT * FROM todos WHERE day_id = $1',
         [dayId]

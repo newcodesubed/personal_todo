@@ -1,4 +1,13 @@
-import { createDay, getDayByDate } from "../repositories/day.repository";
+import { createDay, getDayByDate, updateDayStats } from "../repositories/day.repository";
+import { getTodosByDayId } from "../repositories/todo.repository";
+
+export const refreshDayStats = async (dayId: number) => {
+    const todos = await getTodosByDayId(dayId);
+
+    const { status, ratio } = calculateDayStatus(todos);
+
+    return updateDayStats(dayId, ratio, status);
+};
 
 export const getOrCreateDay = async (date: string) => {
     const existingDay = await getDayByDate(date);
@@ -8,7 +17,7 @@ export const getOrCreateDay = async (date: string) => {
     return createDay(date);
 };
 
-export const calculateDayStatus = (todos: any[]) => {
+export const calculateDayStatus = (todos: any[]): { status: "red" | "green"; ratio: number } => {
     const total = todos.length;
 
     if (total === 0) {
