@@ -59,6 +59,6 @@ export const deleteTodoService = async (id: number) => {
     if (!deleted) {
         throw new Error("Todo not found");
     }
-
+    await refreshDayStats(deleted.day_id);
     return deleted;
 };
