@@ -48,10 +48,10 @@ export const getTodosByDay = async (dayId: number) => {
     return result.rows;
 }
 
-export const updateTodo = async (id: number, text: string, isCompleted: boolean) => {
+export const updateTodo = async (id: number, text: string, completed: boolean) => {
     const result = await pool.query<Todo>(
         'UPDATE todos SET text = $1, completed = $2 WHERE id = $3 RETURNING *',
-        [text, isCompleted, id]
+        [text, completed, id]
     );
     if (result.rows.length === 0) {
         return null;

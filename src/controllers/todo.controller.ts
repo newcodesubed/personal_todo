@@ -34,7 +34,7 @@ export const updateTodoController = async (req: Request, res: Response) => {
     }
 };
 
-export const deleteTodoController = async (req: Request<{ id: number }>, res: Response) => {
+export const deleteTodoController = async (req: Request, res: Response) => {
     try {
         const id = Number(req.params.id);
 

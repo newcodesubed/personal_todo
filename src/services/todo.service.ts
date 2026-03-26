@@ -25,15 +25,18 @@ export const createTodoService = async (date: string, text: string) => {
     return createTodo(day.id, text)
 }
 
-export const updateTodoService = async (id: number, text: string, isCompleted: boolean) => {
+export const updateTodoService = async (id: number, text: string, completed: boolean) => {
     if (!id) {
         throw new Error("Id is required");
     }
     if (!text) {
         throw new Error("Text is required");
     }
+    if (typeof completed !== "boolean") {
+        throw new Error("completed must be boolean");
+    }
 
-    const updated = await updateTodo(id, text, isCompleted)
+    const updated = await updateTodo(id, text, completed)
     if (!updated) {
         throw new Error("Todo not found");
     }
