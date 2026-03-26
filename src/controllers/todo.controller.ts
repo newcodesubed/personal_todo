@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createTodoService, getTodosWithStats, updateTodoService } from "../services/todo.service";
+import { createTodoService, deleteTodoService, getTodosWithStats, updateTodoService } from "../services/todo.service";
 
 export const getTodosByDateController = async (req: Request<{ date: string }>, res: Response) => {
     try {
@@ -27,6 +27,18 @@ export const updateTodoController = async (req: Request, res: Response) => {
         const { text, completed } = req.body;
 
         const todo = await updateTodoService(id, text, completed);
+
+        res.status(200).json(todo);
+    } catch (error: any) {
+        res.status(400).json({ message: error.message });
+    }
+};
+
+export const deleteTodoController = async (req: Request<{ id: number }>, res: Response) => {
+    try {
+        const id = Number(req.params.id);
+
+        const todo = await deleteTodoService(id);
 
         res.status(200).json(todo);
     } catch (error: any) {
