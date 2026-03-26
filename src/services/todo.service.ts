@@ -1,5 +1,5 @@
 import { createTodo, deleteTodo, getTodosByDate, getTodoStatsByDate, updateTodo } from "../repositories/todo.repository";
-import { getOrCreateDay } from "./day.service";
+import { getOrCreateDay, refreshDayStats } from "./day.service";
 
 export const getTodosWithStats = async (date: string) => {
     const [todos, stats] = await Promise.all([
@@ -40,6 +40,7 @@ export const updateTodoService = async (id: number, text: string, completed: boo
     if (!updated) {
         throw new Error("Todo not found");
     }
+    await refreshDayStats(updated.day_id);
     return updated;
 }
 
