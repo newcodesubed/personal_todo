@@ -1,5 +1,6 @@
 import { createDay, getDayByDate } from "../repositories/day.repository";
 import { createTodo, getTodosByDate, getTodoStatsByDate } from "../repositories/todo.repository";
+import { getOrCreateDay } from "./day.service";
 
 export const getTodosWithStats = async (date: string) => {
     const [todos, stats] = await Promise.all([
@@ -21,10 +22,6 @@ export const createTodoService = async (date: string, text: string) => {
     if (!text) {
         throw new Error("Text is required")
     }
-    let day = await getDayByDate(date);
-
-    if (!day) {
-        day = await createDay(date)
-    }
-    return await createTodo(day.id, text)
+    const day = await getOrCreateDay(date)
+    return createTodo(day.id, text)
 }
