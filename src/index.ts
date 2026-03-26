@@ -1,13 +1,12 @@
 import express from "express";
-import { getTodosWithStats } from "./services/todo.service";
+import todoRoutes from "./routes/todo.routes";
 
 const app = express();
 
-app.get("/todos/:date", async (req, res) => {
-  const data = await getTodosWithStats(req.params.date);
-  res.json(data);
-});
+app.use(express.json());
+
+app.use('/todos', todoRoutes);
 
 app.listen(3000, () => {
-  console.log("Server running");
+  console.log("Server running on port 3000");
 });
