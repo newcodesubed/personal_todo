@@ -1,5 +1,4 @@
-import { createDay, getDayByDate } from "../repositories/day.repository";
-import { createTodo, getTodosByDate, getTodoStatsByDate } from "../repositories/todo.repository";
+import { createTodo, deleteTodo, getTodosByDate, getTodoStatsByDate, updateTodo } from "../repositories/todo.repository";
 import { getOrCreateDay } from "./day.service";
 
 export const getTodosWithStats = async (date: string) => {
@@ -25,3 +24,32 @@ export const createTodoService = async (date: string, text: string) => {
     const day = await getOrCreateDay(date)
     return createTodo(day.id, text)
 }
+
+export const updateTodoService = async (id: number, text: string, isCompleted: boolean) => {
+    if (!id) {
+        throw new Error("Id is required");
+    }
+    if (!text) {
+        throw new Error("Text is required");
+    }
+
+    const updated = await updateTodo(id, text, isCompleted)
+    if (!updated) {
+        throw new Error("Todo not found");
+    }
+    return updated;
+}
+
+export const deleteTodoService = async (id: number) => {
+    if (!id) {
+        throw new Error("Todo id is required");
+    }
+
+    const deleted = await deleteTodo(id);
+
+    if (!deleted) {
+        throw new Error("Todo not found");
+    }
+
+    return deleted;
+};

@@ -54,7 +54,7 @@ export const updateTodo = async (id: number, text: string, isCompleted: boolean)
         [text, isCompleted, id]
     );
     if (result.rows.length === 0) {
-        throw new Error("Todo not found");
+        return null;
     }
     return result.rows[0];
 }
@@ -65,7 +65,7 @@ export const deleteTodo = async (id: number) => {
         [id]
     );
     if (result.rows.length === 0) {
-        throw new Error("Todo not found");
+        return null;
     }
     return result.rows[0];
 }
