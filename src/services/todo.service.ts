@@ -22,7 +22,12 @@ export const createTodoService = async (date: string, text: string) => {
         throw new Error("Text is required")
     }
     const day = await getOrCreateDay(date)
-    return createTodo(day.id, text)
+    const todo = await createTodo(day.id, text);
+
+
+    await refreshDayStats(day.id);
+
+    return todo;
 }
 
 export const updateTodoService = async (id: number, text: string, completed: boolean) => {
